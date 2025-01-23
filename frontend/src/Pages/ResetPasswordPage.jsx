@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {useAuthStore} from "../store/authStore.js";
 import { useNavigate, useParams } from "react-router-dom";
-import Input from "../component/input.jsx";
+import Input from "../component/Input.jsx";
 import { Lock } from "lucide-react";
 import toast from "react-hot-toast";
 
