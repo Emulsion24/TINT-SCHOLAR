@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 import { Navigate } from "react-router-dom";
 
 
-
+const API="https://tint-scholar.vercel.app/";
 axios.defaults.withCredentials = true;
 
 export  const useAuthStore = create(
@@ -31,7 +31,7 @@ export  const useAuthStore = create(
 	signup: async ( email, password, name,rollnumber,branch,phnumber) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/signup`, { email, password, name,rollnumber,branch,phnumber });
+			const response = await axios.post(`https://tint-scholar.vercel.app//api/auth/signup`, { email, password, name,rollnumber,branch,phnumber });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
 			set({ error: error.response.data.message || "Error signing up", isLoading: false });
@@ -47,7 +47,7 @@ export  const useAuthStore = create(
 login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-        const response = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
+        const response = await axios.post(`https://tint-scholar.vercel.app//api/auth/login`, { email, password });
         
         // Check if teacher or user data exists and set state accordingly
         const { user, teacher } = response.data;
@@ -69,7 +69,7 @@ login: async (email, password) => {
 	logout: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await axios.post(`http://localhost:5000/api/auth/logout`);
+			await axios.post(`https://tint-scholar.vercel.app//api/auth/logout`);
 			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
 		} catch (error) {
 			set({ error: "Error logging out", isLoading: false });
@@ -79,7 +79,7 @@ login: async (email, password) => {
 	verifyEmail: async (code) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/verifyEmail`, { code });
+			const response = await axios.post(`https://tint-scholar.vercel.app/api/auth/verifyEmail`, { code });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false,  });
 			return response.data;
 		} catch (error) {
@@ -90,7 +90,7 @@ login: async (email, password) => {
 	checkAuth: async () => {
 		set({ isCheckingAuth: true, error: null });
 		try {
-			const response = await axios.get(`http://localhost:5000/api/auth/check-auth`);
+			const response = await axios.get(`https://tint-scholar.vercel.app/api/auth/check-auth`);
 			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false,teacher:response.data.teacher ,userId: response.data.user?._id,teacherId: response.data.teacher?._id});
 		  
 		} catch (error) {
@@ -101,7 +101,7 @@ login: async (email, password) => {
 	forgotPassword: async (email) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/forgot-password`, { email });
+			const response = await axios.post(`https://tint-scholar.vercel.app/api/auth/forgot-password`, { email });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			set({
@@ -114,7 +114,7 @@ login: async (email, password) => {
 	resetPassword: async (token, password) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
+			const response = await axios.post(`https://tint-scholar.vercel.app/api/auth/reset-password/${token}`, { password });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			set({
@@ -127,7 +127,7 @@ login: async (email, password) => {
 	fetchUsers: async () => {
 		set({ isloading: true, error: null });
 		try {
-		  const response = await axios.get('http://localhost:5000/api/admin/users');
+		  const response = await axios.get('https://tint-scholar.vercel.app/api/admin/users');
 		  set({ users: response.data.users, Isloading: false });
 		} catch (error) {
 		  set({ error: error.response.data.message || 'Failed to fetch users', loading: false });
@@ -137,7 +137,7 @@ login: async (email, password) => {
    fetchTeachers: async () => {
 		set({ isloading: true, error: null });
 		try {
-		  const response = await axios.get('http://localhost:5000/api/admin/teachers');
+		  const response = await axios.get('https://tint-scholar.vercel.app/api/admin/teachers');
 		  set({ teachers: response.data.teachers, Isloading: false });
 		} catch (error) {
 		  set({ error: error.response.data.message || 'Failed to fetch users', loading: false });
@@ -153,7 +153,7 @@ login: async (email, password) => {
 		  formData.append('profilePhoto', file);
 	      
 		  // Send request to the server to upload the photo to Cloudinary
-		  const response = await axios.post('http://localhost:5000/api/students/upload-profile-photo', formData, {
+		  const response = await axios.post('https://tint-scholar.vercel.app/students/upload-profile-photo', formData, {
 			
 			headers: {
 			  'Content-Type': 'multipart/form-data',
@@ -187,7 +187,7 @@ login: async (email, password) => {
 			formData.append('averageCGPA', newResult.averageCGPA); // Assuming newResult contains 'averageCGPA'
 		
 			// Make the API request to upload the result
-			const response = await axios.post("http://localhost:5000/api/students/upload-results", formData, {
+			const response = await axios.post("https://tint-scholar.vercel.app/students/upload-results", formData, {
 			  headers: {
 				'Content-Type': 'multipart/form-data',
 			  },
@@ -271,7 +271,7 @@ login: async (email, password) => {
 		  
 			  // Send POST request
 			  const response = await axios.post(
-				"http://localhost:5000/api/students/upload-project",
+				"https://tint-scholar.vercel.app/api/students/upload-project",
 				formData,
 				{
 				  headers: {
@@ -319,7 +319,7 @@ login: async (email, password) => {
 	  
 			  // Send POST request
 			  const response = await axios.post(
-				"http://localhost:5000/api/students/upload-hackathon",
+				"https://tint-scholar.vercel.app/api/students/upload-hackathon",
 				formData,
 				{
 				  headers: {
@@ -346,7 +346,7 @@ login: async (email, password) => {
 			  
 			  // Send a DELETE request to remove the project from the database
 			  const response = await axios.delete(
-				`http://localhost:5000/api/students/delete-projects/${projectId}`,
+				`https://tint-scholar.vercel.app/api/students/delete-projects/${projectId}`,
 				{
 				  withCredentials: true, // Include credentials for authentication
 				}
@@ -377,7 +377,7 @@ login: async (email, password) => {
 	addTeacher: async ( email, password, name, department,employeeId ) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/admin/addTeacher`, { email, password, name, department,employeeId  });
+			const response = await axios.post(`https://tint-scholar.vercel.app/api/admin/addTeacher`, { email, password, name, department,employeeId  });
 			set({ teachers: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
 			set({ error: error.response.data.message || "Error signing up", isLoading: false });
@@ -386,7 +386,7 @@ login: async (email, password) => {
 	},
 		  fetchTeacher: async () => {
 			try {
-			  const response = await axios.get("http://localhost:5000/api/teachers/getteacher");
+			  const response = await axios.get("https://tint-scholar.vercel.app/api/teachers/getteacher");
 			  set({ teachers: response.data });
 			} catch (error) {
 			  console.error("Error fetching teachers:", error);
@@ -395,7 +395,7 @@ login: async (email, password) => {
 		
 		  fetchStudent: async () => {
 			try {
-			  const response = await axios.get("http://localhost:5000/api/students/users");
+			  const response = await axios.get("https://tint-scholar.vercel.app/api/students/users");
 			  set({ users: response.data });
 			} catch (error) {
 			  console.error("Error fetching students:", error);
@@ -403,7 +403,7 @@ login: async (email, password) => {
 		  },
 		  fetchProjects: async () => {
 			try {
-			  const response = await axios.get("http://localhost:5000/api/students/projects"); // Replace with your actual API endpoint
+			  const response = await axios.get("https://tint-scholar.vercel.app/api/students/projects"); // Replace with your actual API endpoint
 			  set({ projects: response.data });
 			} catch (error) {
 			  console.error("Failed to fetch projects:", error);
@@ -412,7 +412,7 @@ login: async (email, password) => {
 		  fetchHackathon: async () => {
 			try {
 				
-			  const response = await axios.get("http://localhost:5000/api/students/hackathon",{
+			  const response = await axios.get("https://tint-scholar.vercel.app/api/students/hackathon",{
 			
 				withCredentials: true,  // Proper placement inside the options object
 			  });
@@ -427,7 +427,7 @@ login: async (email, password) => {
 			  
 			  // Send a DELETE request to remove the project from the database
 			  const response = await axios.delete(
-				`http://localhost:5000/api/students/delete-hackathon/${id}`,
+				`https://tint-scholar.vercel.app/api/students/delete-hackathon/${id}`,
 				{
 				  withCredentials: true, // Include credentials for authentication
 				}
