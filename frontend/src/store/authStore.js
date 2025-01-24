@@ -3,7 +3,7 @@ import axios from "axios";
 import { persist } from "zustand/middleware";
 import { Navigate } from "react-router-dom";
 
-const API = "https://tint-scholar-2b0b3rrda-kaitis-projects.vercel.app/";  // Updated API URL
+const API = "https://tint-scholar.vercel.app/";  // Updated API URL
 axios.defaults.withCredentials = true;
 
 export const useAuthStore = create(
