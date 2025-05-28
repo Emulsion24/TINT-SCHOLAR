@@ -4,7 +4,7 @@ dotenv.config({ path: './path/to/.env' });
 
 export const generateTokenAndSetCookie = (res, userId) => {
   // Use an environment variable for the JWT secret
-  const token = jwt.sign({ userId },process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId },"myname", {
     expiresIn: "7d",
   });
 
