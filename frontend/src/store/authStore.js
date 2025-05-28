@@ -282,7 +282,7 @@ fetchTeachers: async () => {
 		  
 			  // Send POST request
 			  const response = await axios.post(
-				"http://localhost:5000/api/students/upload-project",
+				"https://tint-scholar.onrender.com/api/students/upload-project",
 				formData,
 				{
 				  headers: {
@@ -330,7 +330,7 @@ fetchTeachers: async () => {
 	  
 			  // Send POST request
 			  const response = await axios.post(
-				"http://localhost:5000/api/students/upload-hackathon",
+				"https://tint-scholar.onrender.com/api/students/upload-hackathon",
 				formData,
 				{
 				  headers: {
@@ -357,7 +357,7 @@ fetchTeachers: async () => {
 			  
 			  // Send a DELETE request to remove the project from the database
 			  const response = await axios.delete(
-				`http://localhost:5000/api/students/delete-projects/${projectId}`,
+				`https://tint-scholar.onrender.com/api/students/delete-projects/${projectId}`,
 				{
 				  withCredentials: true, // Include credentials for authentication
 				}
@@ -388,7 +388,7 @@ fetchTeachers: async () => {
 	addTeacher: async ( email, password, name, department,employeeId ) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/admin/addTeacher`, { email, password, name, department,employeeId  });
+			const response = await axios.post(`https://tint-scholar.onrender.com/api/admin/addTeacher`, { email, password, name, department,employeeId  });
 			set({ teachers: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
 			set({ error: error.response.data.message || "Error signing up", isLoading: false });
@@ -402,7 +402,7 @@ fetchTeachers: async () => {
   try {
     const token = localStorage.getItem("authToken"); // Fetch token from localStorage or context
     const response = await axios.post(
-      `http://localhost:5000/api/admin/addStudent`,
+      `https://tint-scholar.onrender.com/api/admin/addStudent`,
       { email, password, name, branch, rollnumber, phnumber },
       {
         headers: {
@@ -422,7 +422,7 @@ fetchTeachers: async () => {
 
 		  fetchTeacher: async () => {
 			try {
-			  const response = await axios.get("http://localhost:5000/api/teachers/getteacher");
+			  const response = await axios.get("https://tint-scholar.onrender.com/api/teachers/getteacher");
 			  set({ teachers: response.data });
 			} catch (error) {
 			  console.error("Error fetching teachers:", error);
@@ -431,7 +431,7 @@ fetchTeachers: async () => {
 		
 		  fetchStudent: async () => {
 			try {addStudent
-			  const response = await axios.get("http://localhost:5000/api/students/users");
+			  const response = await axios.get("https://tint-scholar.onrender.com/api/students/users");
 			  set({ users: response.data });
 			} catch (error) {
 			  console.error("Error fetching students:", error);
@@ -439,7 +439,7 @@ fetchTeachers: async () => {
 		  },
 		  fetchProjects: async () => {
 			try {
-			  const response = await axios.get("http://localhost:5000/api/students/projects"); // Replace with your actual API endpoint
+			  const response = await axios.get("https://tint-scholar.onrender.com/api/students/projects"); // Replace with your actual API endpoint
 			  set({ projects: response.data });
 			} catch (error) {
 			  console.error("Failed to fetch projects:", error);
@@ -448,7 +448,7 @@ fetchTeachers: async () => {
 		  fetchHackathon: async () => {
 			try {
 				
-			  const response = await axios.get("http://localhost:5000/api/students/hackathon",{
+			  const response = await axios.get("https://tint-scholar.onrender.com/api/students/hackathon",{
 			
 				withCredentials: true,  // Proper placement inside the options object
 			  });
@@ -464,7 +464,7 @@ fetchTeachers: async () => {
 			  
 			  // Send a DELETE request to remove the project from the database
 			  const response = await axios.delete(
-				`http://localhost:5000/api/students/delete-hackathon/${id}`,
+				`https://tint-scholar.onrender.com/api/students/delete-hackathon/${id}`,
 				{
 				  withCredentials: true, // Include credentials for authentication
 				}
@@ -497,7 +497,7 @@ fetchTeachers: async () => {
 				
 				// Send a DELETE request to remove the project from the database
 				const response = await axios.delete(
-				  `http://localhost:5000/api/admin/delete-students/${id}`,
+				  `https://tint-scholar.onrender.com/api/admin/delete-students/${id}`,
 				  {
 					withCredentials: true, // Include credentials for authentication
 				  }
@@ -534,7 +534,7 @@ uploadPublication: async (newPublication) => {
 
 
     const response = await axios.post(
-      `http://localhost:5000/api/teachers/publication/add`,
+      `https://tint-scholar.onrender.com/api/teachers/publication/add`,
       { title, journal, year },
       {
 		withCredentials: true,
@@ -561,7 +561,7 @@ getPublications: async () => {
   set({ isLoading: true, error: null });
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/teachers/publication/get`,
+      `https://tint-scholar.onrender.com/api/teachers/publication/get`,
       {
 		withCredentials: true,
        
@@ -587,7 +587,7 @@ deletePublication: async (pubId) => {
   try {
     
     await axios.delete(
-      `http://localhost:5000/api/teachers/delete-publication/${pubId}`,
+      `https://tint-scholar.onrender.com/api/teachers/delete-publication/${pubId}`,
       {
 		withCredentials: true,
        
@@ -612,7 +612,7 @@ getAllPublications: async () => {
   set({ isLoading: true, error: null });
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/admin/publication/all`,
+      `https://tint-scholar.onrender.com/api/admin/publication/all`,
       {
 		withCredentials: true,
        
@@ -642,7 +642,7 @@ uploadMarks: async ({ subject, semester, internal, file }) => {
     formData.append("file", file);
 
     const response = await axios.post(
-      `http://localhost:5000/api/teachers/uploadmarks`,
+      `https://tint-scholar.onrender.com/api/teachers/uploadmarks`,
       formData,
       {
         headers: {
@@ -674,7 +674,7 @@ getResults: async (semester, internalNumber,rollnumber) => {
     }
 
     const response = await axios.get(
-      `http://localhost:5000/api/students/internal-results`, // Your API endpoint for internal results
+      `https://tint-scholar.onrender.com/api/students/internal-results`, // Your API endpoint for internal results
       {
         params: {
           rollNumber: rollnumber,  // Send roll number from user object
@@ -707,7 +707,7 @@ getProjectsByContributor: async (userId) => {
     }
 
     const response = await axios.get(
-      `http://localhost:5000/api/admin/projects/byContributor/${userId}`, // Your backend endpoint
+      `https://tint-scholar.onrender.com/api/admin/projects/byContributor/${userId}`, // Your backend endpoint
       {
         withCredentials: true, // Include credentials if needed
       }
@@ -730,7 +730,7 @@ getProjectsByContributor: async (userId) => {
 getAllHackathon: async () => {
 			try {
 				
-			  const response = await axios.get("http://localhost:5000/api/admin/hackathons",{
+			  const response = await axios.get("https://tint-scholar.onrender.com/api/admin/hackathons",{
 			
 				withCredentials: true,  // Proper placement inside the options object
 			  });
