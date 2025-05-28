@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const MoocsSection = () => {
+const AdminMoocs = () => {
   const [moocs, setMoocs] = useState([
     {
       certificateName: "React.js Essentials",
@@ -21,7 +21,6 @@ const MoocsSection = () => {
     certificateName: "",
     certificatePdf: null,
     verificationUrl: "",
-    platfrom:''
   });
 
   const handleUploadMooc = () => {
@@ -31,7 +30,6 @@ const MoocsSection = () => {
       certificateName: "",
       certificatePdf: null,
       verificationUrl: "",
-      platfrom:''
     });
   };
 
@@ -113,15 +111,6 @@ const MoocsSection = () => {
                 }
                 className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-                <input
-                type="text"
-                placeholder="Platfrom"
-                value={newMooc.platfrom}
-                onChange={(e) =>
-                  setNewMooc({ ...newMooc, platfrom: e.target.value })
-                }
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
               <input
                 type="url"
                 placeholder="Verification URL"
@@ -189,4 +178,4 @@ const MoocsSection = () => {
   );
 };
 
-export default MoocsSection;
+export default AdminMoocs;

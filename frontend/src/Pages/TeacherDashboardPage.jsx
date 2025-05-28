@@ -11,7 +11,9 @@ import ProjectsSection from "../component/ProjectSection.jsx";
 import Allprojects from "../component/AllProjects.jsx";
 
 // Import icons from lucide/react
-import { Home as HomeIcon, User as ProfileIcon, FileText as PublicationIcon, Award as WorkshopIcon, Trophy as AchievementsIcon, Calendar as EventsIcon, Code as ProjectsIcon, Folder as AllProjectsIcon, LogOut as LogOutIcon } from "lucide-react";
+import { Home as HomeIcon, User as ProfileIcon, FileText as PublicationIcon, Award as WorkshopIcon, Trophy as AchievementsIcon, Calendar as EventsIcon, Code as ProjectsIcon, Folder as AllProjectsIcon, LogOut as LogOutIcon, Plus } from "lucide-react";
+import MarksUpload from "../component/MarksUpload.jsx";
+import AttendanceUpload from "../component/AttandenceUpload.jsx";
 
 const TeacherDashboard = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -39,6 +41,10 @@ const TeacherDashboard = () => {
         return <ProjectsSection />;
       case "allprojects":
         return <Allprojects />;
+      case "uploadmarks":
+        return <MarksUpload/>;
+      case "uploadattandance":
+        return <AttendanceUpload />;
       default:
         return null;
     }
@@ -53,6 +59,8 @@ const TeacherDashboard = () => {
     { name: "Events", icon: <EventsIcon className="w-6 h-6" /> },
     { name: "My Projects", icon: <ProjectsIcon className="w-6 h-6" /> },
     { name: "All Projects", icon: <AllProjectsIcon className="w-6 h-6" /> },
+     { name: "Upload Marks", icon: <Plus className="w-6 h-6" /> },
+      { name: "Upload Attandance", icon: <Plus className="w-6 h-6" /> },
   ];
 
   return (

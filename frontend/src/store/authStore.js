@@ -2,26 +2,32 @@ import { create } from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
 import { Navigate } from "react-router-dom";
+import { User, Users } from "lucide-react";
 
 
 
 axios.defaults.withCredentials = true;
 
-export  const useAuthStore = create(
+ export  const useAuthStore = create(
 	
 	(set) => ({
 	user: null,
+	CAresults:[],
 	users:[],
 	isAuthenticated: false,
 	error: null,
 	isLoading: false,
 	isCheckingAuth: true,
+	publications: [],
 	message: null,
 	teacher:null,
 	teachers:[],
+	studentProjects:[],
 	project:null,
 	projects:[],
 	filteredProjectsCount:0,
+	Allpublications:[],
+	AllHackathons:[],
 	hackathons: [],
     setHackathons: (newHackathons) => set({ hackathons: newHackathons }),
 	userId: null,
@@ -124,26 +130,31 @@ login: async (email, password) => {
 			throw error;
 		}
 	},
-	fetchUsers: async () => {
-		set({ isloading: true, error: null });
-		try {
-		  const response = await axios.get('http://localhost:5000/api/admin/users');
-		  set({ users: response.data.users, Isloading: false });
-		} catch (error) {
-		  set({ error: error.response.data.message || 'Failed to fetch users', loading: false });
-		}
-		throw error;
-	  },
-   fetchTeachers: async () => {
-		set({ isloading: true, error: null });
-		try {
-		  const response = await axios.get('http://localhost:5000/api/admin/teachers');
-		  set({ teachers: response.data.teachers, Isloading: false });
-		} catch (error) {
-		  set({ error: error.response.data.message || 'Failed to fetch users', loading: false });
-		}throw error;
-		
-	  },
+fetchUsers: async () => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.get('http://localhost:5000/api/admin/users');
+    set({ users: response.data.users, isLoading: false });
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || error.message || 'Failed to fetch users';
+    set({ error: errorMessage, isLoading: false });
+    throw new Error(errorMessage); // Optional: only if you want to handle upstream
+  }
+},
+
+fetchTeachers: async () => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.get('http://localhost:5000/api/admin/teachers');
+    set({ teachers: response.data.teachers, isLoading: false });
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || error.message || 'Failed to fetch teachers';
+    set({ error: errorMessage, isLoading: false });
+    throw new Error(errorMessage); // Optional
+  }
+},
 	  uploadProfilePhoto: async (file) => {
 		set({ isLoading: true, error: null });
 		
@@ -179,7 +190,7 @@ login: async (email, password) => {
 			const formData = new FormData();
 			
 			// Append the file to formData
-			formData.append('file', file); // Assuming the backend expects 'file' key for the uploaded file
+			formData.append('pdfFile', file); // Assuming the backend expects 'file' key for the uploaded file
 		
 			// Append additional result data
 			formData.append('semester', newResult.semester); 
@@ -384,6 +395,31 @@ login: async (email, password) => {
 			throw error;
 		}
 	},
+
+	
+	addStudent: async (email, password, name, branch, rollnumber, phnumber) => {
+  set({ isLoading: true, error: null });
+  try {
+    const token = localStorage.getItem("authToken"); // Fetch token from localStorage or context
+    const response = await axios.post(
+      `http://localhost:5000/api/admin/addStudent`,
+      { email, password, name, branch, rollnumber, phnumber },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    set({ users: response.data.user, isAuthenticated: true, isLoading: false });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error adding student",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
 		  fetchTeacher: async () => {
 			try {
 			  const response = await axios.get("http://localhost:5000/api/teachers/getteacher");
@@ -394,7 +430,7 @@ login: async (email, password) => {
 		  },
 		
 		  fetchStudent: async () => {
-			try {
+			try {addStudent
 			  const response = await axios.get("http://localhost:5000/api/students/users");
 			  set({ users: response.data });
 			} catch (error) {
@@ -421,6 +457,7 @@ login: async (email, password) => {
 			  console.error("Error fetching Hackathons:", error);
 			}
 		  },
+		   
 		  deleteHackathon: async (id) => {
 			try {
 			  console.log(`Sending DELETE request for project: ${id}`);
@@ -486,7 +523,229 @@ login: async (email, password) => {
 				}
 			  }
 
-		  }
+		  },
+
+uploadPublication: async (newPublication) => {
+  set({ isLoading: true, error: null });
+
+  const { title, journal, year } = newPublication; // ✅ Destructure the values
+
+  try {
+
+
+    const response = await axios.post(
+      `http://localhost:5000/api/teachers/publication/add`,
+      { title, journal, year },
+      {
+		withCredentials: true,
+      
+      }
+    );
+
+    set((state) => ({
+      publications: [...(state.publications || []), response.data],
+      isLoading: false,
+    }));
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error uploading publication",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
+
+
+getPublications: async () => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/teachers/publication/get`,
+      {
+		withCredentials: true,
+       
+      }
+    );
+
+    set({
+      publications: response.data,
+      isLoading: false,
+    });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error fetching publications",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
+
+deletePublication: async (pubId) => {
+  set({ isLoading: true, error: null });
+  try {
+    
+    await axios.delete(
+      `http://localhost:5000/api/teachers/delete-publication/${pubId}`,
+      {
+		withCredentials: true,
+       
+      }
+    );
+
+    // Remove from state
+    set((state) => ({
+      publications: (state.publications || []).filter((p) => p._id !== pubId),
+      isLoading: false,
+    }));
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error deleting publication",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
+getAllPublications: async () => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/admin/publication/all`,
+      {
+		withCredentials: true,
+       
+      }
+    );
+
+    set({
+      Allpublications: response.data,
+      isLoading: false,
+    });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error fetching publications",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
+uploadMarks: async ({ subject, semester, internal, file }) => {
+  set({ isLoading: true, error: null });
+  try {
+    const formData = new FormData();
+    formData.append("subject", subject);
+    formData.append("semester", semester);
+    formData.append("internal", internal);
+    formData.append("file", file);
+
+    const response = await axios.post(
+      `http://localhost:5000/api/teachers/uploadmarks`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+
+    set({ isLoading: false });
+    return response.data; // success response, optionally return it
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Upload failed",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+getResults: async (semester, internalNumber,rollnumber) => {
+  set({ isLoading: true, error: null });
+
+  try {
+     // Get the user and token from the store
+
+    if ( !rollnumber) {
+      set({ error: 'User not logged in or rollNumber missing', isLoading: false });
+      return;
+    }
+
+    const response = await axios.get(
+      `http://localhost:5000/api/students/internal-results`, // Your API endpoint for internal results
+      {
+        params: {
+          rollNumber: rollnumber,  // Send roll number from user object
+          semester,  // Semester parameter
+          internalNumber: internalNumber, // Remove 'CA' prefix
+        },
+       
+        withCredentials: true,  // Ensure credentials (cookies) are included
+      }
+    );
+    set({
+      CAresults: response.data.data || [],
+      isLoading: false,
+    });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || 'Error fetching internal results',
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+getProjectsByContributor: async (userId) => {
+  set({ isLoading: true, error: null });
+
+  try {
+    if (!userId) {
+      set({ error: "User ID is missing", isLoading: false });
+      return;
+    }
+
+    const response = await axios.get(
+      `http://localhost:5000/api/admin/projects/byContributor/${userId}`, // Your backend endpoint
+      {
+        withCredentials: true, // Include credentials if needed
+      }
+    );
+
+    console.log("Projects fetched:", response.data);
+
+    set({
+      studentProjects: response.data || [],
+      isLoading: false,
+    });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error fetching projects",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+getAllHackathon: async () => {
+			try {
+				
+			  const response = await axios.get("http://localhost:5000/api/admin/hackathons",{
+			
+				withCredentials: true,  // Proper placement inside the options object
+			  });
+			  set({ AllHackathons: response.data }); 
+			  // Update the hackathons state with the fetched data
+			} catch (error) {
+			  console.error("Error fetching Hackathons:", error);
+			}
+		  },
+		   
+
+
+
+
+
 		
 		  // Add other actions like uploadProject, deleteProject, etc.
 		}),

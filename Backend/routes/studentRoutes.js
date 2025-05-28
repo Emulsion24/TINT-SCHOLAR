@@ -1,10 +1,11 @@
 import express from "express";
-import { uploadProfilePhoto,updateProfilePhoto,uploadnypdf, addSemResult, resultDelete, addProject ,projectsDelete,getprojects,addHackathon,hackathonDelete,getHackathon} from "../Controler/studentControlar.js";
+import { uploadProfilePhoto,updateProfilePhoto,uploadnypdf, addSemResult, resultDelete, addProject ,projectsDelete,getprojects,addHackathon,hackathonDelete,getHackathon,getInternalResults} from "../Controler/studentControlar.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { User } from "../models/User.js";
 import { Teacher } from "../models/Teacher.js";
 import { Project } from "../models/Projects.js";
 import { uploadpdf } from "../middleware/multer.js";
+import InternalResults from "../models/InternalResults.js";
 
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.delete('/delete-projects/:projectId',verifyToken,projectsDelete);
 router.post('/upload-hackathon',verifyToken,uploadpdf.single('pdfFile'),addHackathon);
 router.get('/hackathon',verifyToken,getHackathon );
 router.delete('/delete-hackathon/:id',verifyToken,hackathonDelete);
+router.get('/internal-results', verifyToken, getInternalResults);
 
 
 

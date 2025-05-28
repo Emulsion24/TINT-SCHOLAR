@@ -6,6 +6,7 @@ import { Teacher } from '../models/Teacher.js';
 import { Hackathon } from '../models/Hackathon.js';
 import { uploadphoto,uploadpdf } from '../middleware/multer.js'; 
 import cloudinary from '../cloudinaryConfig.js'; 
+import InternalResults from '../models/InternalResults.js';
 const { ObjectId } = mongoose.Types;
 
 
@@ -66,7 +67,9 @@ export const addSemResult= async (req,res)=>{
         }
     
         // Upload the file to Cloudinary
-        const uploadResult = await cloudinary.uploadCloudinary(req.file.path); // Upload the file to Cloudinary
+        const uploadResult = await cloudinary.uploadCloudinary(req.file.path,{
+          resource_type: "auto",
+        }); // Upload the file to Cloudinary
         if (!uploadResult) {
           return res.status(500).json({ message: 'Error uploading file to Cloudinary' });
         }
@@ -104,13 +107,7 @@ export const addSemResult= async (req,res)=>{
     
         // Save the updated user to the database
         await user.save();
-        fs.unlink(req.file.path, (err) => {
-          if (err) {
-            console.error('Error deleting file:', err);
-          } else {
-            console.log('Local file deleted:', req.file.path);
-          }
-        });
+    
         // Send success response before deleting the file
         return res.status(200).json({
           success: true,
@@ -400,5 +397,48 @@ export const hackathonDelete=async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
+
+export const getInternalResults = async (req, res) => {
+  const { rollNumber, semester, internalNumber } = req.query;
+
+  // Validate required parameters
+  if (!rollNumber || !semester || !internalNumber) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing required query parameters: rollNumber, semester, or internalNumber",
+    });
+  }
+console.log(rollNumber);
+  try {
+    // Query the database for the internal results
+    const results = await InternalResults.find({
+      rollNumber,
+      semester: Number(semester), // Convert to number for consistency
+      internalNumber,
+    }); // Populating mentor info, assuming mentor is a reference to another model (if required)
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No results found for the given parameters",
+      });
+    }
+
+    // Respond with the fetched data
+    res.status(200).json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching internal results",
+    });
+  }
+  
+};
+
+
 

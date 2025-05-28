@@ -1,52 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useAuthStore } from "../store/authStore";
 
 const PublicationSection = () => {
-  const [publications, setPublications] = useState([
-    {
-      id: 1,
-      title: "Research on Machine Learning",
-      journal: "International Journal of AI",
-      year: 2022,
-    },
-    {
-      id: 2,
-      title: "Advanced Web Development",
-      journal: "Web Tech Today",
-      year: 2021,
-    },
-  ]);
-
+  const { publications, uploadPublication, deletePublication, getPublications } = useAuthStore();
   const [newPublication, setNewPublication] = useState({
     title: "",
     journal: "",
     year: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Fetch publications when the component mounts
+    getPublications();
+  }, []); // ✅ Only run once on mount
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewPublication({ ...newPublication, [name]: value });
   };
 
-  const handleAddPublication = () => {
+  const handleAddPublication = async () => {
     if (!newPublication.title || !newPublication.journal || !newPublication.year) {
       alert("Please fill all fields before adding a publication.");
       return;
     }
 
-    const newId = publications.length > 0 ? publications[publications.length - 1].id + 1 : 1;
-    setPublications([
-      ...publications,
-      { id: newId, ...newPublication },
-    ]);
-    setNewPublication({ title: "", journal: "", year: "" });
+    setIsLoading(true);
+    try {
+      await uploadPublication(newPublication);
+      setNewPublication({ title: "", journal: "", year: "" });
+    } catch (error) {
+      console.error("Error adding publication:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDeletePublication = (id) => {
-    setPublications(publications.filter((pub) => pub.id !== id));
+  const handleDeletePublication = async (id) => {
+    try {
+      await deletePublication(id);
+    } catch (error) {
+      console.error("Error deleting publication:", error);
+    }
   };
+
+  const isArray = Array.isArray(publications); // ✅ Ensure it's an array
 
   return (
-    <div className="p-6 bg-gray-800 rounded-lg shadow-md">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="p-6 bg-gray-800 rounded-lg shadow-md"
+    >
       <h1 className="text-3xl font-bold text-white mb-6">Publications</h1>
 
       {/* Add Publication Form */}
@@ -81,15 +90,16 @@ const PublicationSection = () => {
         <button
           onClick={handleAddPublication}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          disabled={isLoading}
         >
-          Add Publication
+          {isLoading ? "Adding..." : "Add Publication"}
         </button>
       </div>
 
       {/* Publications List */}
       <div className="bg-gray-700 p-4 rounded-lg">
         <h2 className="text-xl font-semibold text-white mb-4">Publication List</h2>
-        {publications.length > 0 ? (
+        {isArray && publications.length > 0 ? (
           <table className="w-full text-left text-gray-300">
             <thead>
               <tr>
@@ -101,13 +111,13 @@ const PublicationSection = () => {
             </thead>
             <tbody>
               {publications.map((pub) => (
-                <tr key={pub.id} className="hover:bg-gray-600">
+                <tr key={pub._id || pub.id} className="hover:bg-gray-600">
                   <td className="px-4 py-2">{pub.title}</td>
                   <td className="px-4 py-2">{pub.journal}</td>
                   <td className="px-4 py-2">{pub.year}</td>
                   <td className="px-4 py-2">
                     <button
-                      onClick={() => handleDeletePublication(pub.id)}
+                      onClick={() => handleDeletePublication(pub._id || pub.id)}
                       className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     >
                       Delete
@@ -121,7 +131,7 @@ const PublicationSection = () => {
           <p className="text-gray-400">No publications added yet.</p>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

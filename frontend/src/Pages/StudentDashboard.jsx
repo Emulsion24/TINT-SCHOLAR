@@ -8,6 +8,8 @@ import HackathonSection from "../component/HackathonSection.jsx";
 import MoocsSection from "../component/MoocsSection.jsx";
 import HomeSection from "../component/HomeSection.jsx";
 import AllProjects from "../component/AllProjects.jsx";
+import CaMarks from "../component/CaMarks.jsx";
+import Attendance from "../component/Attandence.jsx";
 
 const StudentDashboard = () => {
   const { user, logout } = useAuthStore();
@@ -44,6 +46,10 @@ const StudentDashboard = () => {
         return <HackathonSection />;
       case "moocs":
         return <MoocsSection />;
+      case "camarks":
+        return <CaMarks />;
+      case "attandence":
+        return <Attendance />;
        
       default:
         return null;
@@ -83,6 +89,8 @@ const StudentDashboard = () => {
             { name: "AllProjects", icon: "📁" },
             { name: "Hackathons", icon: "🚀" },
             { name: "MOOCs", icon: "📚" },
+            { name: "CAMarks", icon: "📊" },
+            { name: "Attandence", icon: "📚" },
           ].map(({ name, icon }) => (
             <button
               key={name}

@@ -11,6 +11,8 @@ const teacherSchema = new mongoose.Schema({
   role: { type: String, default: 'teacher' }, // Default role
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  publications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Publication' }],
+
 });
 
 export const Teacher = mongoose.model('Teacher', teacherSchema);

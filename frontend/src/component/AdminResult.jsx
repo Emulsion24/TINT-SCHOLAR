@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 
-const ResultSection = () => {
-  const { user, addSemesterResult, deleteSemesterResult } = useAuthStore((state) => ({
-    user: state.user,
+const AdminResult = ({user}) => {
+  const { addSemesterResult, deleteSemesterResult } = useAuthStore((state) => ({
+    
     addSemesterResult: state.addSemesterResult,
     deleteSemesterResult: state.deleteSemesterResult,
   }));
@@ -186,4 +186,4 @@ const ResultSection = () => {
   );
 };
 
-export default ResultSection;
+export default AdminResult;
