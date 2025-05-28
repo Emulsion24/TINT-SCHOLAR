@@ -37,7 +37,7 @@ axios.defaults.withCredentials = true;
 	signup: async ( email, password, name,rollnumber,branch,phnumber) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/signup`, { email, password, name,rollnumber,branch,phnumber });
+			const response = await axios.post(`https://tint-scholar.onrender.com/api/auth/signup`, { email, password, name,rollnumber,branch,phnumber });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
 			set({ error: error.response.data.message || "Error signing up", isLoading: false });
@@ -53,7 +53,7 @@ axios.defaults.withCredentials = true;
 login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-        const response = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
+        const response = await axios.post(`https://tint-scholar.onrender.com/api/auth/login`, { email, password });
         
         // Check if teacher or user data exists and set state accordingly
         const { user, teacher } = response.data;
@@ -75,7 +75,7 @@ login: async (email, password) => {
 	logout: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await axios.post(`http://localhost:5000/api/auth/logout`);
+			await axios.post(`https://tint-scholar.onrender.com/api/auth/logout`);
 			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
 		} catch (error) {
 			set({ error: "Error logging out", isLoading: false });
@@ -85,7 +85,7 @@ login: async (email, password) => {
 	verifyEmail: async (code) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/verifyEmail`, { code });
+			const response = await axios.post(`https://tint-scholar.onrender.com/api/auth/verifyEmail`, { code });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false,  });
 			return response.data;
 		} catch (error) {
@@ -96,7 +96,7 @@ login: async (email, password) => {
 	checkAuth: async () => {
 		set({ isCheckingAuth: true, error: null });
 		try {
-			const response = await axios.get(`http://localhost:5000/api/auth/check-auth`);
+			const response = await axios.get(`https://tint-scholar.onrender.com/api/auth/check-auth`);
 			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false,teacher:response.data.teacher ,userId: response.data.user?._id,teacherId: response.data.teacher?._id});
 		  
 		} catch (error) {
@@ -107,7 +107,7 @@ login: async (email, password) => {
 	forgotPassword: async (email) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/forgot-password`, { email });
+			const response = await axios.post(`https://tint-scholar.onrender.com/api/auth/forgot-password`, { email });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			set({
@@ -120,7 +120,7 @@ login: async (email, password) => {
 	resetPassword: async (token, password) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
+			const response = await axios.post(`https://tint-scholar.onrender.com/api/auth/reset-password/${token}`, { password });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			set({
@@ -133,7 +133,7 @@ login: async (email, password) => {
 fetchUsers: async () => {
   set({ isLoading: true, error: null });
   try {
-    const response = await axios.get('http://localhost:5000/api/admin/users');
+    const response = await axios.get('https://tint-scholar.onrender.com/api/admin/users');
     set({ users: response.data.users, isLoading: false });
   } catch (error) {
     const errorMessage =
@@ -146,7 +146,7 @@ fetchUsers: async () => {
 fetchTeachers: async () => {
   set({ isLoading: true, error: null });
   try {
-    const response = await axios.get('http://localhost:5000/api/admin/teachers');
+    const response = await axios.get('https://tint-scholar.onrender.com/api/admin/teachers');
     set({ teachers: response.data.teachers, isLoading: false });
   } catch (error) {
     const errorMessage =
@@ -164,7 +164,7 @@ fetchTeachers: async () => {
 		  formData.append('profilePhoto', file);
 	      
 		  // Send request to the server to upload the photo to Cloudinary
-		  const response = await axios.post('http://localhost:5000/api/students/upload-profile-photo', formData, {
+		  const response = await axios.post('https://tint-scholar.onrender.com/api/students/upload-profile-photo', formData, {
 			
 			headers: {
 			  'Content-Type': 'multipart/form-data',
@@ -198,7 +198,7 @@ fetchTeachers: async () => {
 			formData.append('averageCGPA', newResult.averageCGPA); // Assuming newResult contains 'averageCGPA'
 		
 			// Make the API request to upload the result
-			const response = await axios.post("http://localhost:5000/api/students/upload-results", formData, {
+			const response = await axios.post("https://tint-scholar.onrender.com/api/students/upload-results", formData, {
 			  headers: {
 				'Content-Type': 'multipart/form-data',
 			  },
@@ -225,7 +225,7 @@ fetchTeachers: async () => {
 				
 				// Send a DELETE request to remove the result from the database
 				const response = await axios.delete(
-					`http://localhost:5000/api/students/delete-results/${semester}`,
+					`https://tint-scholar.onrender.com/api/students/delete-results/${semester}`,
 					{
 						withCredentials: true, // Include credentials for authentication
 					}
