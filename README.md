@@ -27,9 +27,9 @@ Whether you need to manage student data, upload marks, or generate academic repo
 
 | Role    | Email / Username       | Password     | Description                                      |
 |----------|------------------------|--------------|--------------------------------------------------|
-| **Admin**    | `admin@tint.edu`       | `Admin123!`  | Manage users, teachers, and student records.     |
-| **Teacher**  | `teacher1@tint.edu`    | `Teach123!`  | Upload marks, attendance, and reports.           |
-| **Student**  | `student1@tint.edu`    | `Stud123!`   | (Optional) View grades and reports.              |
+| **Admin**    | `shavandebkaiti1024@gmail.com`       | `Kaiti@123`  | Manage users, teachers, and student records.     |
+| **Teacher**  | `teacher@gmail.com`    | `123456`  | Upload marks, attendance, and reports.           |
+| **Student**  | `amannisi23@gmail.com`    | `123456`   | (Optional) View grades and reports.              |
 
 > ⚠️ **Note:** These accounts are for demo/testing only. Use strong passwords and separate credentials in production.
 
