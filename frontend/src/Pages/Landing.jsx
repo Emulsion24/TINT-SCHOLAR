@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -56,6 +54,49 @@ function Landing() {
         >
           <Link to="/signup">New User</Link>
         </motion.div>
+      </motion.div>
+
+      {/* Sample Login Details Card */}
+      <motion.div
+        className="z-10 mt-10 bg-white bg-opacity-10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg p-6 text-white w-80 sm:w-[28rem]"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.8 }}
+      >
+        <h2 className="text-xl font-semibold text-center mb-3">
+          🔑 Sample Login Details
+        </h2>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="font-medium">Admin:</span>
+            <span>shavandebkaiti1024@gmail.com</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Password:</span>
+            <span>Kaiti@123</span>
+          </div>
+          <hr className="my-2 border-white/30" />
+          <div className="flex justify-between">
+            <span className="font-medium">Teacher:</span>
+            <span>teacher@gmail.com</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Password:</span>
+            <span>123456</span>
+          </div>
+          <hr className="my-2 border-white/30" />
+          <div className="flex justify-between">
+            <span className="font-medium">Student:</span>
+            <span>amannisi23@gmail.com</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Password:</span>
+            <span>123456</span>
+          </div>
+        </div>
+        <p className="text-center text-xs text-gray-300 mt-3">
+          (For demo purposes only)
+        </p>
       </motion.div>
 
       {/* 3D Background animation */}
